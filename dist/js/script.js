@@ -229,13 +229,14 @@ window.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("scroll", showModalByScroll); //use classes
 
   class MenuCard {
-    constructor(src, alt, title, descr, price, parentSelector) {
+    constructor(src, alt, title, descr, price, parentSelector, ...classes) {
       this.src = src;
       this.alt = alt;
       this.title = title;
       this.descr = descr;
       this.price = price;
       this.parent = document.querySelector(parentSelector);
+      this.classes = classes;
       this.transfer = 60;
       this.changeToRUB();
     }
@@ -246,7 +247,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
     render() {
       const element = document.createElement("div");
-      element.innerHTML = ` <div class="menu__item">
+
+      if (this.classes.length === 0) {
+        this.element = "menu__item";
+        element.classList.add(this.element);
+      } else {
+        this.classes.forEach(className => {
+          element.classList.add(className);
+        });
+      }
+
+      element.innerHTML = `
                         <img src=${this.src} alt=${this.alt} />
                         <h3 class="menu__item-subtitle">${this.title}</h3>
                         <div class="menu__item-descr">
@@ -259,7 +270,7 @@ window.addEventListener("DOMContentLoaded", () => {
                                 <span>${this.price}</span> руб/день
                             </div>
                         </div>
-                    </div>`;
+                    `;
       this.parent.append(element);
     }
 
